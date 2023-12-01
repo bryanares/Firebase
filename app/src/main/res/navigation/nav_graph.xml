@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.firebaseathentication.features.auth.presentation.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_spendingHistoryListFragment"
+            app:destination="@id/spendingHistoryListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="com.example.firebaseathentication.features.auth.presentation.registration.RegistrationFragment"
+        android:label="fragment_registration"
+        tools:layout="@layout/fragment_registration" >
+        <action
+            android:id="@+id/action_registrationFragment_to_spendingHistoryListFragment"
+            app:destination="@id/spendingHistoryListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editSpendingFragment"
+        android:name="com.example.firebaseathentication.features.spending_history.presentation.spending_history_edit.EditSpendingFragment"
+        android:label="fragment_edit_spending"
+        tools:layout="@layout/fragment_edit_spending" >
+        <argument
+            android:name="user_id"
+            app:argType="string" />
+        <argument
+            android:name="record_id"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_editSpendingFragment_to_spendDetailFragment"
+            app:destination="@id/spendDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/spendingHistoryListFragment"
+        android:name="com.example.firebaseathentication.features.spending_history.presentation.spending_history_listing.SpendingHistoryListFragment"
+        android:label="fragment_spending_history_list"
+        tools:layout="@layout/fragment_spending_history_list" >
+        <action
+            android:id="@+id/action_spendingHistoryListFragment_to_editSpendingFragment"
+            app:destination="@id/editSpendingFragment" />
+        <argument
+            android:name="user_id"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_spendingHistoryListFragment_to_spendDetailFragment"
+            app:destination="@id/spendDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/spendDetailFragment"
+        android:name="com.example.firebaseathentication.features.spending_history.presentation.spending_history.SpendDetailFragment"
+        android:label="fragment_spend_detail"
+        tools:layout="@layout/fragment_spend_detail" >
+        <action
+            android:id="@+id/action_spendDetailFragment_to_editSpendingFragment"
+            app:destination="@id/editSpendingFragment" />
+        <argument
+            android:name="user_id"
+            app:argType="string" />
+        <argument
+            android:name="record_id"
+            app:argType="string" />
+    </fragment>
+</navigation>
