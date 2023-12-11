@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/md_theme_light_background"
     tools:context=".features.spending_history.presentation.spending_history_edit.EditSpendingFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -45,7 +46,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -97,14 +99,18 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        app:circularflow_radiusInDP="16d"
         android:id="@+id/textView"
         android:layout_width="0dp"
+        android:padding="8dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="82dp"
         android:layout_marginEnd="24dp"
         android:text="Create a new spending record"
+        android:textColor="@color/md_theme_light_onPrimaryContainer"
         android:textSize="48sp"
+        android:background="@drawable/rounded_corner_view"
         app:layout_constraintBottom_toTopOf="@+id/spend_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
