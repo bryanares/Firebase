@@ -164,4 +164,33 @@ class SpendingHistoryViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteSingleSpendingHistory(userId: String, historyId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            repository.deleteSingleSpendingHistory(userId, historyId).collectLatest { result ->
+                when (result) {
+                    //return refreshed list
+                    is Rezults.Success -> {
+                        _spendingHistoryUiState.update {
+                            SpendHistoryUiState(
+                                isLoading = false,
+                                isSuccessful = true,
+                                spendHistoryList = result.data
+                            )
+                        }
+                    }
+                    is Rezults.Error -> {
+                        _spendingHistoryUiState.update {
+                            SpendHistoryUiState(
+                                isLoading = false,
+                                isSuccessful = false,
+                                error = result.exception?.message
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
