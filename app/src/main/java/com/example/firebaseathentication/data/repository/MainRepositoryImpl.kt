@@ -1,6 +1,7 @@
 package com.example.firebaseathentication.data.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.firebaseathentication.data.local.SpendingHistory
 import com.example.firebaseathentication.data.local.User
@@ -16,10 +17,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+const val TAG : String = "Repo"
 class MainRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val myfirebaseFirestore: FirebaseFirestore
-) : MainRepository {
+) : MainRepository
+{
     override suspend fun signIn(email: String, password: String): Flow<Rezults<User>> {
         return callbackFlow {
             firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -168,6 +171,20 @@ class MainRepositoryImpl @Inject constructor(
                 ).isSuccess
             }
         awaitClose { this.cancel() }
+    }
+
+    override suspend fun deleteSingleSpendingHistory(
+        userId: String,
+        historyId: String
+    ): Flow<Rezults<List<SpendingHistory>>> = callbackFlow{
+        myfirebaseFirestore.collection(userId).document(FirebaseDocument.SPENDING_HISTORY)
+            .collection(FirebaseDocument.SPENDING_HISTORY)
+            .document(historyId)
+            .delete()
+            //I want to fetch a list of the new items in the collection after deleting
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 
     //create unique Id using userId, timesStamp, key and key2 variables
