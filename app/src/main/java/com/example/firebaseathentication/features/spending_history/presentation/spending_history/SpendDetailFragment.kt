@@ -1,20 +1,18 @@
 package com.example.firebaseathentication.features.spending_history.presentation.spending_history
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.firebaseathentication.R
 import com.example.firebaseathentication.data.utils.getFullDateFromLong
 import com.example.firebaseathentication.databinding.FragmentSpendDetailBinding
-import com.example.firebaseathentication.databinding.FragmentSpendingHistoryListBinding
 import com.example.firebaseathentication.features.spending_history.domain.viewmodel.SpendingHistoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -49,6 +47,17 @@ class SpendDetailFragment : Fragment() {
                 )
             )
         }
+        spendDetailBinding.deleteSleepDetail.setOnClickListener {
+            spendingHistoryViewModel.deleteSingleSpendingHistory(
+                spendingHistoryDetailFragmentArgs.userId,
+                spendingHistoryDetailFragmentArgs.recordId
+            )
+            findNavController().navigate(
+                SpendDetailFragmentDirections.actionSpendDetailFragmentToSpendingHistoryListFragment(
+                    spendingHistoryDetailFragmentArgs.userId
+                )
+            )
+        }
     }
 
     private fun collectLatestStates() {
@@ -61,7 +70,7 @@ class SpendDetailFragment : Fragment() {
                             "Date: ${spendHistory?.date?.getFullDateFromLong() ?: "N/A"}"
                         spendDetailBinding.amountTxt.text =
                             "Amount: ${spendHistory?.amount ?: "N/A"}"
-                        spendDetailBinding.descriptionTxt.text=
+                        spendDetailBinding.descriptionTxt.text =
                             "Category: ${spendHistory?.category ?: "N/A"}"
                     }
                 }
