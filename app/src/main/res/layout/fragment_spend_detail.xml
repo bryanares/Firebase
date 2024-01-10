@@ -66,7 +66,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/amount_txt" />
-
     <Button
         android:id="@+id/update_sleep_detail"
         android:layout_width="0dp"
@@ -75,6 +74,21 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
         android:text="Update"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/delete_sleep_detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/delete_sleep_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        android:text="Delete"
+        app:icon="@drawable/delete_icon"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:textAllCaps="false"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
