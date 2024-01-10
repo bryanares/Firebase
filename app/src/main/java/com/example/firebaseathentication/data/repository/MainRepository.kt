@@ -21,4 +21,6 @@ interface MainRepository{
         //get one spending history
         suspend fun getSpendingHistory(userId: String, historyId: String): Flow<Rezults<SpendingHistory>>
 
+        //delete single spending history
+        suspend fun deleteSingleSpendingHistory(userId: String, historyId: String) : Flow<Rezults<List<SpendingHistory>>>
 }
