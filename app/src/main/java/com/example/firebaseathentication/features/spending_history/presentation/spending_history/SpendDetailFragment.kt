@@ -47,6 +47,7 @@ class SpendDetailFragment : Fragment() {
                 )
             )
         }
+        collectLatestStates()
         spendDetailBinding.deleteSleepDetail.setOnClickListener {
             spendingHistoryViewModel.deleteSingleSpendingHistory(
                 spendingHistoryDetailFragmentArgs.userId,
