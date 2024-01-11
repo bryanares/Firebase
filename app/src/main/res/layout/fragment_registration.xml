@@ -15,6 +15,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:hint="Email"
+        android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toTopOf="@+id/name_reg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -32,6 +33,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:hint="Name"
+        android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toTopOf="@+id/password_reg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -49,6 +51,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:hint="Password"
+        android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toTopOf="@+id/confirm_password_reg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +70,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:hint="Confirm Password"
+        android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toTopOf="@+id/reg_bt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
