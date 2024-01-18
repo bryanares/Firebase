@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.callbackFlow
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-const val TAG : String = "Repo"
+const val TAG: String = "Repo"
+
 class MainRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val myfirebaseFirestore: FirebaseFirestore
-) : MainRepository
-{
+) : MainRepository {
     override suspend fun signIn(email: String, password: String): Flow<Rezults<User>> {
         return callbackFlow {
             firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -55,27 +55,27 @@ class MainRepositoryImpl @Inject constructor(
         password: String,
         name: String
     ): Flow<Rezults<User>> = callbackFlow {
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        this.trySend(
-                            Rezults.Success(
-                                User(
-                                    firebaseAuth.currentUser!!.uid
-                                )
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    this.trySend(
+                        Rezults.Success(
+                            User(
+                                firebaseAuth.currentUser!!.uid
                             )
-                        ).isSuccess
+                        )
+                    ).isSuccess
 
-                    } else {
-                        this.trySend(
-                            Rezults.Error(
-                                "",
-                                task.exception!!
-                            )
-                        ).isSuccess
-                    }
+                } else {
+                    this.trySend(
+                        Rezults.Error(
+                            "",
+                            task.exception!!
+                        )
+                    ).isSuccess
                 }
-            awaitClose { this.cancel() }
+            }
+        awaitClose { this.cancel() }
     }
 
 
@@ -122,33 +122,34 @@ class MainRepositoryImpl @Inject constructor(
         awaitClose { this.cancel() }
     }
 
-    override suspend fun getAllSpendingHistory(userId: String): Flow<Rezults<List<SpendingHistory>>>  = callbackFlow{
-       //get all items in the collection
-        myfirebaseFirestore.collection(userId).document(FirebaseDocument.SPENDING_HISTORY)
-            .collection(FirebaseDocument.SPENDING_HISTORY).get()
-            .addOnSuccessListener { documentReference ->
-                //create instance of history list
-                var historyList = mutableListOf<SpendingHistory>()
-                //loop through documents in the collection, get their id's and add them to the history list
-                for (document in documentReference.documents) {
-                    var history = document.toObject(SpendingHistory::class.java)?.copy(
-                        id = document.id
-                    )
-                    historyList.add(history!!)
+    override suspend fun getAllSpendingHistory(userId: String): Flow<Rezults<List<SpendingHistory>>> =
+        callbackFlow {
+            //get all items in the collection
+            myfirebaseFirestore.collection(userId).document(FirebaseDocument.SPENDING_HISTORY)
+                .collection(FirebaseDocument.SPENDING_HISTORY).get()
+                .addOnSuccessListener { documentReference ->
+                    //create instance of history list
+                    var historyList = mutableListOf<SpendingHistory>()
+                    //loop through documents in the collection, get their id's and add them to the history list
+                    for (document in documentReference.documents) {
+                        var history = document.toObject(SpendingHistory::class.java)?.copy(
+                            id = document.id
+                        )
+                        historyList.add(history!!)
+                    }
+                    this.trySend(
+                        Rezults.Success(
+                            historyList
+                        )
+                    ).isSuccess
                 }
-                this.trySend(
-                    Rezults.Success(
-                        historyList
-                    )
-                ).isSuccess
-            }
-        awaitClose { this.cancel()}
-    }
+            awaitClose { this.cancel() }
+        }
 
     override suspend fun getSpendingHistory(
         userId: String,
         historyId: String
-    ): Flow<Rezults<SpendingHistory>>  = callbackFlow{
+    ): Flow<Rezults<SpendingHistory>> = callbackFlow {
         myfirebaseFirestore.collection(userId).document(FirebaseDocument.SPENDING_HISTORY)
             .collection(FirebaseDocument.SPENDING_HISTORY)
             .document(historyId).get()
@@ -162,7 +163,7 @@ class MainRepositoryImpl @Inject constructor(
                     )
                 ).isSuccess
             }
-            .addOnFailureListener {e ->
+            .addOnFailureListener { e ->
                 this.trySend(
                     Rezults.Error(
                         "",
@@ -176,15 +177,17 @@ class MainRepositoryImpl @Inject constructor(
     override suspend fun deleteSingleSpendingHistory(
         userId: String,
         historyId: String
-    ): Flow<Rezults<List<SpendingHistory>>> = callbackFlow{
+    ): Flow<Rezults<List<SpendingHistory>>> = callbackFlow {
         myfirebaseFirestore.collection(userId).document(FirebaseDocument.SPENDING_HISTORY)
             .collection(FirebaseDocument.SPENDING_HISTORY)
             .document(historyId)
             .delete()
             //I want to fetch a list of the new items in the collection after deleting
             .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+            }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+        awaitClose { this.cancel() }
     }
 
     //create unique Id using userId, timesStamp, key and key2 variables
