@@ -94,7 +94,7 @@ class EditSpendingFragment : Fragment() {
                     requireActivity(),
                     "The camera permission has not been granted",
                     Toast.LENGTH_LONG
-                )
+                ).show()
             }
         }
     }
