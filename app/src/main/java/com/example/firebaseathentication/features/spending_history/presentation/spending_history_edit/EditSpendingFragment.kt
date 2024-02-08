@@ -48,6 +48,21 @@ class EditSpendingFragment : Fragment() {
 
     private var selectedDate: Long? = null
 
+    private lateinit var result: ActivityResultLauncher<String>
+    var currentPhotoPath: String? = null
+    var isTakingPicture = false
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        result = registerForActivityResult(ActivityResultContracts.RequestPermission(), { granted ->
+            if (granted == true && isTakingPicture) {
+                isTakingPicture = false
+                dispatchTakePictureIntent()
+            }
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,8 +77,92 @@ class EditSpendingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         collectStates()
         setViews()
+
+        val cameraPermissionGranted = checkCameraPermission()
+        if (!cameraPermissionGranted) {
+            requestCameraPermission()
+        }
+        editSpendingBinding.takePhotoTextView.setOnClickListener {
+            val newCameraPermissionGranted = checkCameraPermission()
+            Log.d("Tag", "The camera permission status: $newCameraPermissionGranted")
+            if (!newCameraPermissionGranted) {
+                isTakingPicture = true
+                requestCameraPermission()
+            } else {
+                dispatchTakePictureIntent()
+                Toast.makeText(
+                    requireActivity(),
+                    "The camera permission has not been granted",
+                    Toast.LENGTH_LONG
+                )
+            }
+        }
     }
 
+    private fun checkCameraPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_DENIED
+    }
+
+    private fun requestCameraPermission(onGranted: ((Boolean) -> Unit)? = null) {
+        Log.d("Tag", "Launch request Permission")
+        result.launch(Manifest.permission.CAMERA)
+
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Log.d("TAG", "dispatchTakePictureIntent: ")
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            // Ensure that there's a camera activity to handle the intent
+
+            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
+                // Create the File where the photo should go
+                Log.d("TAG", "dispatchTakePictureIntent: dispatchTakePictureIntent")
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    Log.e("TAG", "dispatchTakePictureIntent: ${ex.message}")
+                    null
+                }
+                Log.e("TAG", "dispatchTakePictureIntent: ${photoFile?.absolutePath}")
+                // Continue only if the File was successfully created
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        requireActivity(),
+                        "com.example.firebaseathentication.fileprovider",
+                        it
+                    )
+                    //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takePictureIntent, 1234)
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1234 && resultCode == RESULT_OK && data != null) {
+            val imageBitmap = data.extras?.get("data") as Bitmap
+            editSpendingBinding.spendingImageView.setImageBitmap(imageBitmap)
+        }
+    }
 
     private fun setViews() {
         editSpendingBinding.spendDate.editText?.isFocusable = false
@@ -158,7 +257,7 @@ class EditSpendingFragment : Fragment() {
                         )
 
                     }
-                    if (it.updatedSpendHistory != null && spendingHistoryEditFragmentArgs.recordId != null){
+                    if (it.updatedSpendHistory != null && spendingHistoryEditFragmentArgs.recordId != null) {
                         spendingHistoryViewModel.resetState()
                         findNavController().navigate(
                             EditSpendingFragmentDirections.actionEditSpendingFragmentToSpendDetailFragment(
