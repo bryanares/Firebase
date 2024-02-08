@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/md_theme_light_background"
     tools:context=".features.spending_history.presentation.spending_history_edit.EditSpendingFragment">
 
@@ -46,8 +46,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -82,8 +81,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
@@ -99,21 +97,39 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        app:circularflow_radiusInDP="16d"
         android:id="@+id/textView"
         android:layout_width="0dp"
-        android:padding="8dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="82dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="24dp"
+        android:background="@drawable/rounded_corner_view"
+        android:padding="8dp"
         android:text="Create a new spending record"
         android:textColor="@color/md_theme_light_onPrimaryContainer"
         android:textSize="48sp"
-        android:background="@drawable/rounded_corner_view"
-        app:layout_constraintBottom_toTopOf="@+id/spend_date"
+        app:circularflow_radiusInDP="16d"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include_app_bar_cover_detail" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/spendingImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/textView"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        tools:src="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/takePhotoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Take Photo"
+        app:layout_constraintStart_toStartOf="@id/spendingImageView"
+        app:layout_constraintTop_toBottomOf="@id/spendingImageView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
