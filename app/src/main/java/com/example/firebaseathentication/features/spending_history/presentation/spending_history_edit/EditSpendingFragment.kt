@@ -26,6 +26,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.firebaseathentication.R
 import com.example.firebaseathentication.data.utils.getFullDateFromLong
 import com.example.firebaseathentication.databinding.FragmentEditSpendingBinding
 import com.example.firebaseathentication.features.spending_history.domain.viewmodel.SpendingHistoryViewModel
@@ -55,12 +56,12 @@ class EditSpendingFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        result = registerForActivityResult(ActivityResultContracts.RequestPermission(), { granted ->
+        result = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted == true && isTakingPicture) {
                 isTakingPicture = false
                 dispatchTakePictureIntent()
             }
-        })
+        }
     }
 
     override fun onCreateView(
@@ -156,6 +157,7 @@ class EditSpendingFragment : Fragment() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1234 && resultCode == RESULT_OK && data != null) {
@@ -200,7 +202,7 @@ class EditSpendingFragment : Fragment() {
                 var spendDescription =
                     editSpendingBinding.spendDescription.editText?.text.toString()
 
-                if (spendAmount != null && spendAmount != null && selectedDate != null) {
+                if (spendAmount != null && selectedDate != null) {
 
                     spendingHistoryViewModel.addSpendingHistory(
                         spendingHistoryEditFragmentArgs.userId,
@@ -212,7 +214,7 @@ class EditSpendingFragment : Fragment() {
             }
         } else {
             //update existing record
-            editSpendingBinding.textView.setText("Edit Spend Record")
+            editSpendingBinding.textView.text = getString(R.string.edit_spend_record)
             spendingHistoryViewModel.getSingleSpendingHistory(
                 spendingHistoryEditFragmentArgs.userId,
                 spendingHistoryEditFragmentArgs.recordId!!
