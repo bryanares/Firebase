@@ -1,8 +1,6 @@
 package com.example.firebaseathentication.data.repository
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.example.firebaseathentication.data.local.SpendingHistory
 import com.example.firebaseathentication.data.local.User
 import com.example.firebaseathentication.data.utils.FirebaseDocument
@@ -80,7 +78,6 @@ class MainRepositoryImpl @Inject constructor(
 
 
     //add or update spending history
-    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun addOrUpdateSpendingHistory(
         userId: String,
         historyId: String?,
@@ -101,7 +98,7 @@ class MainRepositoryImpl @Inject constructor(
             .collection(FirebaseDocument.SPENDING_HISTORY)
             .document(fileHistoryId).set(history)
             .addOnSuccessListener { documentReference ->
-                var newSpendHistory = history.copy(id = fileHistoryId)
+                val newSpendHistory = history.copy(id = fileHistoryId)
 
                 this.trySend(
                     Rezults.Success(
