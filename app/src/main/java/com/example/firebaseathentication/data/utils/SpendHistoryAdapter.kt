@@ -7,7 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 
 class SpendHistoryAdapter (
-    val onEachItem: (Any, View) -> Unit,
+    private val onEachItem: (Any, View) -> Unit,
     @LayoutRes val holderView: Int
 ) : RecyclerView.Adapter<SpendHistoryAdapter.SpendHistoryViewHolder>() {
 
@@ -27,10 +27,8 @@ class SpendHistoryAdapter (
         holder: SpendHistoryViewHolder,
         position: Int
     ) {
-        val item = dataList.get(position)
-        if (item != null) {
-            holder.bind(item)
-        }
+        val item = dataList[position]
+        holder.bind(item)
     }
 
     fun setData(dataList: List<Any>){
